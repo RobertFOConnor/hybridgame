@@ -44,7 +44,7 @@ public class TileManager {
         makeWalls(physicsManager.getWorld());
         setupMapWidthHeight();
 
-        physicsManager.getPlayer(0).setPos(mapWidth * tileSize / 2 / PPM, mapHeight * tileSize / 2 / PPM);
+        //physicsManager.getPlayer(0).setPos(mapWidth * tileSize / 2 / PPM, mapHeight * tileSize / 2 / PPM);
     }
 
     public void makeWalls(World world) {

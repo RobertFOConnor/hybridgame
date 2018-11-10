@@ -72,7 +72,7 @@ public class PhysicsManager {
 
     public void createPlayer(BasicController controller) {
         Sprite playerSprite = new Sprite(new Texture("textures/player/p_1.png"));
-        playerSprite.setPosition(0, 0);
+        playerSprite.setPosition(80*2, 80*4);
         physicsPlayers.add(new PhysicsPlayer(playerSprite, controller));
     }
 

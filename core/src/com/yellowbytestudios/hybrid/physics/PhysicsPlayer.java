@@ -63,7 +63,7 @@ public class PhysicsPlayer extends PhysicsCharacter {
         Body body = getBody();
         Vector2 velocity = body.getLinearVelocity();
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             dashing = true;
         }
 
