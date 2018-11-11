@@ -36,8 +36,6 @@ public class PhysicsManager {
     private boolean gameOver = false;
 
 
-    private boolean trackPlayer = true;
-
     public PhysicsManager(OrthographicCamera camera) {
         this.camera = camera;
         world = new World(new Vector2(0, GRAVITY), true);
@@ -77,7 +75,7 @@ public class PhysicsManager {
 
     public void createPlayer(BasicController controller) {
         Sprite playerSprite = new Sprite(new Texture("textures/player/p_idle.png"));
-        playerSprite.setPosition(80 * 2, 80 * 4);
+        playerSprite.setPosition(80 * 3, 80 * 4);
         physicsPlayers.add(new PhysicsPlayer(playerSprite, controller));
     }
 
@@ -118,33 +116,31 @@ public class PhysicsManager {
     }
 
     public void cameraTrackPlayer() {
-        if (trackPlayer) {
-            PhysicsPlayer player = physicsPlayers.get(0);
-            Sprite playerSprite = player.getSprite();
-            setCamPos(playerSprite.getX() + MainGame.WIDTH / 3, playerSprite.getY());
-            float camX = camera.position.x;
-            float camY = camera.position.y;
+        PhysicsPlayer player = physicsPlayers.get(0);
+        Sprite playerSprite = player.getSprite();
+        setCamPos(playerSprite.getX() + MainGame.WIDTH / 3, playerSprite.getY());
+        float camX = camera.position.x;
+        float camY = camera.position.y;
 
-            float leftLimit = MainGame.WIDTH / 2;
-            float rightLimit = TileManager.mapWidth * 80 - MainGame.WIDTH / 2;
+        float leftLimit = MainGame.WIDTH / 2;
+        float rightLimit = TileManager.mapWidth * 80 - MainGame.WIDTH / 2;
 
-            float bottomLimit = MainGame.HEIGHT / 2;
-            float topLimit = TileManager.mapHeight * 80 - MainGame.HEIGHT / 2;
+        float bottomLimit = MainGame.HEIGHT / 2;
+        float topLimit = TileManager.mapHeight * 80 - MainGame.HEIGHT / 2;
 
-            if (camX < leftLimit) {
-                setCamPos(leftLimit, camY);
-            } else if (camX > rightLimit) {
-                setCamPos(rightLimit, camY);
-            }
+        if (camX < leftLimit) {
+            setCamPos(leftLimit, camY);
+        } else if (camX > rightLimit) {
+            setCamPos(rightLimit, camY);
+        }
 
-            camX = camera.position.x;
-            camY = camera.position.y;
+        camX = camera.position.x;
+        camY = camera.position.y;
 
-            if (camY < bottomLimit) {
-                setCamPos(camX, bottomLimit);
-            } else if (camY > topLimit) {
-                setCamPos(camX, topLimit);
-            }
+        if (camY < bottomLimit) {
+            setCamPos(camX, bottomLimit);
+        } else if (camY > topLimit) {
+            setCamPos(camX, topLimit);
         }
     }
 

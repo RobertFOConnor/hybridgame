@@ -29,38 +29,19 @@ public class PhysicsContactListener implements ContactListener {
         checkObjectContact(fixtureB, fixtureA);
     }
 
-    private void checkPlayerContacts(Fixture fixture, boolean isStartContact) {
-        checkPlayerGrounded(fixture, isStartContact);
-        checkPlayerLeftContact(fixture, isStartContact);
-        checkPlayerRightContact(fixture, isStartContact);
-    }
-
-    public void checkPlayerGrounded(Fixture fixture, boolean starting) {
+    public void checkPlayerContacts(Fixture fixture, boolean starting) {
         Object data = fixture.getUserData();
-        if (data != null && data.equals(PLAYER_FOOT)) {
+        if (data != null) {
             if (fixture.getBody().getUserData() instanceof PhysicsPlayer) {
                 PhysicsPlayer physicsPlayer = (PhysicsPlayer) fixture.getBody().getUserData();
-                physicsPlayer.setGroundContacts(physicsPlayer.getGroundContacts() + (starting ? 1 : -1));
-            }
-        }
-    }
-
-    public void checkPlayerLeftContact(Fixture fixture, boolean starting) {
-        Object data = fixture.getUserData();
-        if (data != null && data.equals(PLAYER_LEFT_SIDE)) {
-            if (fixture.getBody().getUserData() instanceof PhysicsPlayer) {
-                PhysicsPlayer physicsPlayer = (PhysicsPlayer) fixture.getBody().getUserData();
-                physicsPlayer.setLeftContacts(physicsPlayer.getLeftContacts() + (starting ? 1 : -1));
-            }
-        }
-    }
-
-    public void checkPlayerRightContact(Fixture fixture, boolean starting) {
-        Object data = fixture.getUserData();
-        if (data != null && data.equals(PLAYER_RIGHT_SIDE)) {
-            if (fixture.getBody().getUserData() instanceof PhysicsPlayer) {
-                PhysicsPlayer physicsPlayer = (PhysicsPlayer) fixture.getBody().getUserData();
-                physicsPlayer.setRightContacts(physicsPlayer.getRightContacts() + (starting ? 1 : -1));
+                int increment = (starting ? 1 : -1);
+                if (data.equals(PLAYER_FOOT)) {
+                    physicsPlayer.setGroundContacts(physicsPlayer.getGroundContacts() + increment);
+                } else if (data.equals(PLAYER_LEFT_SIDE)) {
+                    physicsPlayer.setLeftContacts(physicsPlayer.getLeftContacts() + increment);
+                } else if (data.equals(PLAYER_RIGHT_SIDE)) {
+                    physicsPlayer.setRightContacts(physicsPlayer.getRightContacts() + increment);
+                }
             }
         }
     }
