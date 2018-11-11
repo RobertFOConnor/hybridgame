@@ -92,6 +92,8 @@ public class PhysicsPlayer extends PhysicsCharacter {
     private void beginWallJump(boolean left) {
         body.setLinearVelocity(left ? WALL_JUMP : -WALL_JUMP, JUMP);
         setWallJumping(true);
+        setFacingLeft(!left);
+        currSprite.setLeft(!left);
     }
 
     private void updateWalking(float delta) {
