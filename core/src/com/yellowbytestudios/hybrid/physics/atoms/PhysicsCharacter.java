@@ -11,6 +11,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import static com.yellowbytestudios.hybrid.physics.consts.ObjectNames.PLAYER_FOOT;
 import static com.yellowbytestudios.hybrid.physics.consts.ObjectNames.PLAYER_LEFT_SIDE;
 import static com.yellowbytestudios.hybrid.physics.consts.ObjectNames.PLAYER_RIGHT_SIDE;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_ENEMY;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_PLAYER;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_WALL;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
 
 public class PhysicsCharacter extends PhysicsObject {
@@ -34,6 +37,8 @@ public class PhysicsCharacter extends PhysicsObject {
         fixtureDef.shape = shape;
         fixtureDef.density = 0.1f;
         fixtureDef.friction = 0f;
+        fixtureDef.filter.categoryBits = BIT_PLAYER;
+        fixtureDef.filter.maskBits = BIT_WALL | BIT_ENEMY;
         body.createFixture(fixtureDef);
         shape.dispose();
 
@@ -54,8 +59,8 @@ public class PhysicsCharacter extends PhysicsObject {
         FixtureDef rdef = new FixtureDef();
         rdef.shape = shape;
         rdef.isSensor = true;
-        // fdef.filter.categoryBits = BIT_PLAYER;
-        // fdef.filter.maskBits = BIT_PLAYER | BIT_WALL;
+        rdef.filter.categoryBits = BIT_PLAYER;
+        rdef.filter.maskBits = BIT_WALL | BIT_ENEMY;
         this.body.createFixture(rdef).setUserData(userData);
         shape.dispose();
     }

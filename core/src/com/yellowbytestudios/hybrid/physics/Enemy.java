@@ -13,6 +13,9 @@ import com.yellowbytestudios.hybrid.media.Assets;
 import com.yellowbytestudios.hybrid.physics.atoms.PhysicsCharacter;
 
 import static com.yellowbytestudios.hybrid.physics.consts.ObjectNames.ENEMY;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_ENEMY;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_PLAYER;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_WALL;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
 
 public class Enemy extends PhysicsCharacter {
@@ -37,8 +40,8 @@ public class Enemy extends PhysicsCharacter {
         fixtureDef.shape = shape;
         fixtureDef.friction = 0f;
         fixtureDef.isSensor = false;
-        //fixtureDef.filter.categoryBits = BIT_PLAYER;
-        //fixtureDef.filter.maskBits = BIT_PLAYER;
+        fixtureDef.filter.categoryBits = BIT_ENEMY;
+        fixtureDef.filter.maskBits = BIT_WALL | BIT_PLAYER;
         body.createFixture(fixtureDef).setUserData(ENEMY);
         shape.dispose();
 

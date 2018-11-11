@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
 
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_ENEMY;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_PLAYER;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_WALL;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
@@ -182,6 +183,7 @@ public class TilePhysicsWallMaker {
         fdef.density = 1f;
         fdef.shape = chainShape;
         fdef.filter.categoryBits = BIT_WALL;
+        fdef.filter.maskBits = BIT_PLAYER | BIT_ENEMY;
 
         Body wallsBody = world.createBody(bdef);
         wallsBody.createFixture(fdef).setUserData("ground");

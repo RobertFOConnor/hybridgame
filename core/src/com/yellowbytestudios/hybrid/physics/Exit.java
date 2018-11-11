@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.yellowbytestudios.hybrid.physics.atoms.PhysicsObject;
 import com.yellowbytestudios.hybrid.physics.consts.ObjectNames;
 
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_PLAYER;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_WALL;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
 
 public class Exit extends PhysicsObject {
@@ -28,8 +30,8 @@ public class Exit extends PhysicsObject {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
-        //fixtureDef.filter.categoryBits = BIT_WALL;
-        //fixtureDef.filter.maskBits = BIT_PLAYER;
+        fixtureDef.filter.categoryBits = BIT_WALL;
+        fixtureDef.filter.maskBits = BIT_PLAYER;
         body.createFixture(fixtureDef).setUserData(ObjectNames.EXIT);
         shape.dispose();
         this.body = body;

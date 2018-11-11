@@ -26,7 +26,7 @@ public class CameraManager {
 
     public void update(float delta, Sprite playerSprite) {
 
-        float targetX = playerSprite.getX() + MainGame.WIDTH / 3;
+        float targetX = playerSprite.getX() + MainGame.WIDTH / 4;
         float targetY = playerSprite.getY() + playerSprite.getHeight() / 2;
 
         float camX = camera.position.x;

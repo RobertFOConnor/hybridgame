@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_PLAYER;
+import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_WALL;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
 
 public class PhysicsObject {
@@ -37,8 +39,8 @@ public class PhysicsObject {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 0.01f;
-        //fixtureDef.filter.categoryBits = BIT_WALL;
-        //fixtureDef.filter.maskBits = BIT_PLAYER;
+        fixtureDef.filter.categoryBits = BIT_WALL;
+        fixtureDef.filter.maskBits = BIT_PLAYER;
         body.createFixture(fixtureDef).setUserData("wall");
 
         shape.dispose();

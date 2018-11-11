@@ -12,6 +12,7 @@ import com.yellowbytestudios.hybrid.controller.ControllerManager;
 import com.yellowbytestudios.hybrid.controller.types.BasicController;
 import com.yellowbytestudios.hybrid.controller.types.KeyboardController;
 import com.yellowbytestudios.hybrid.controller.types.XboxController;
+import com.yellowbytestudios.hybrid.effects.ParticleManager;
 import com.yellowbytestudios.hybrid.physics.atoms.PhysicsObject;
 import com.yellowbytestudios.hybrid.tile.TileManager;
 
@@ -24,6 +25,7 @@ public class PhysicsManager {
 
     private World world;
     private CameraManager cameraManager;
+    private ParticleManager particleManager;
     private PhysicsContactListener contactListener;
     private ArrayList<PhysicsPlayer> physicsPlayers;
     private ArrayList<PhysicsObject> worldObjects;
@@ -39,6 +41,7 @@ public class PhysicsManager {
         contactListener = new PhysicsContactListener();
         world.setContactListener(contactListener);
         cameraManager = new CameraManager(camera, new OrthographicCamera());
+        particleManager = new ParticleManager();
 
         worldObjects = new ArrayList<PhysicsObject>();
         objectsToRemove = new ArrayList<Integer>();
@@ -86,6 +89,8 @@ public class PhysicsManager {
                 } else if (object instanceof Enemy) {
                     if (getPlayer(0).isDashing()) {
                         objectsToRemove.add(worldObjects.indexOf(object));
+                        Sprite enemy = object.getSprite();
+                        particleManager.addEffect(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2);
                     } else {
                         gameOver = true;
                         // damage player
@@ -102,6 +107,7 @@ public class PhysicsManager {
         }
         objectsToRemove.clear();
         cameraManager.update(delta, getPlayer(0).getSprite());
+        particleManager.update(delta);
     }
 
     public boolean isGameOver() {
@@ -117,6 +123,7 @@ public class PhysicsManager {
         for (PhysicsObject object : worldObjects) {
             object.render(sb);
         }
+        particleManager.render(sb);
         sb.end();
     }
 
