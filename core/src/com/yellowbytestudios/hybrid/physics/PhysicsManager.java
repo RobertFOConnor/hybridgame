@@ -30,7 +30,7 @@ public class PhysicsManager {
     private ArrayList<Integer> objectsToRemove;
 
     //Debugging
-    private static final boolean drawDebug = true;
+    private static final boolean drawDebug = false;
     private boolean gameOver = false;
 
 
@@ -110,12 +110,14 @@ public class PhysicsManager {
 
     public void render(SpriteBatch sb) {
         if (drawDebug) {
-            cameraManager.renderDebug(sb, world);
+            cameraManager.renderDebug(world);
         }
 
+        sb.begin();
         for (PhysicsObject object : worldObjects) {
             object.render(sb);
         }
+        sb.end();
     }
 
     public PhysicsPlayer getPlayer(int index) {

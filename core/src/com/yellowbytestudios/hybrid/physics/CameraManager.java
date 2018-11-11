@@ -78,10 +78,8 @@ public class CameraManager {
         debugCamera.update();
     }
 
-    public void renderDebug(SpriteBatch sb, World world) {
-        sb.end();
+    public void renderDebug(World world) {
         box2DDebugRenderer.render(world, debugCamera.combined);
-        sb.begin();
     }
 
     public void setCamPos(float x, float y) {

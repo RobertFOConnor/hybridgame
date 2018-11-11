@@ -32,10 +32,8 @@ public class GameScreen extends Screen {
     @Override
     public void render(SpriteBatch sb, ShapeRenderer sr) {
         sb.setProjectionMatrix(camera.combined);
-        sb.begin();
         tileManager.render();
         physicsManager.render(sb);
-        sb.end();
     }
 
     @Override
