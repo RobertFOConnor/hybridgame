@@ -15,6 +15,8 @@ import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
 
 public class PhysicsCharacter extends PhysicsObject {
 
+    private boolean facingLeft = false;
+
     public PhysicsCharacter(String name, Sprite sprite) {
         super(name, sprite);
     }
@@ -56,5 +58,17 @@ public class PhysicsCharacter extends PhysicsObject {
         // fdef.filter.maskBits = BIT_PLAYER | BIT_WALL;
         this.body.createFixture(rdef).setUserData(userData);
         shape.dispose();
+    }
+
+    public void applyXSpeed(float speed) {
+        body.setLinearVelocity(speed, body.getLinearVelocity().y);
+    }
+
+    public boolean isFacingLeft() {
+        return facingLeft;
+    }
+
+    public void setFacingLeft(boolean facingLeft) {
+        this.facingLeft = facingLeft;
     }
 }

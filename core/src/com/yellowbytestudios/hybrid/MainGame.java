@@ -38,7 +38,7 @@ public class MainGame extends ApplicationAdapter {
     @Override
     public void render() {
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl20.glClearColor(0, 0, 0, 0);
+        Gdx.gl20.glClearColor(0.1f, 0.6f, 0.8f, 0);
 
         if (Assets.update() && !loaded) {
             loaded = true;

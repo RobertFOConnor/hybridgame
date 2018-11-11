@@ -24,7 +24,7 @@ public class GameScreen extends Screen {
         super.update(delta);
         physicsManager.update(delta);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R) || physicsManager.isGameOver()) {
             ScreenManager.setScreen(new GameScreen());
         }
     }
