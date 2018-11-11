@@ -16,11 +16,12 @@ public class PhysicsObject {
     protected Body body;
     protected Sprite sprite;
     private boolean dynamic = true;
+    private boolean playerTouched = false;
 
     public PhysicsObject(String name, Sprite sprite) {
         this.name = name;
         this.sprite = sprite;
-        this.sprite.setPosition(this.sprite.getX() / PPM, this.sprite.getY() / PPM);
+        this.sprite.setPosition(sprite.getX() / PPM, sprite.getY() / PPM);
     }
 
     public void build(World world) {
@@ -43,15 +44,28 @@ public class PhysicsObject {
         shape.dispose();
 
         this.body = body;
+        setupUserData();
+    }
+
+    public boolean isPlayerTouched() {
+        return playerTouched;
+    }
+
+    public void setPlayerTouched(boolean playerTouched) {
+        this.playerTouched = playerTouched;
+    }
+
+    public void setupUserData() {
+        body.setUserData(this);
+        body.setFixedRotation(true);
     }
 
     public void update(float delta) {
         sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
-        //sprite.setRotation((float) Math.toDegrees(body.getAngle()));
     }
 
     public void render(SpriteBatch sb) {
-        sprite.draw(sb);
+        sb.draw(sprite, sprite.getX(), sprite.getY());
     }
 
     public boolean isDynamic() {

@@ -11,15 +11,17 @@ import com.yellowbytestudios.hybrid.media.Assets;
 
 public class AnimatedSprite extends Sprite {
 
-    private static float FRAME_DURATION = .05f;
+    private float FRAME_DURATION = .07f;
     private Animation animation;
+    private TextureRegion currentFrame;
     private float elapsed_time = 0f;
+    private boolean left = false;
 
-    public AnimatedSprite(String atlas, float x, float y) {
+    public AnimatedSprite(String atlas, float x, float y, String name) {
         super(new Sprite());
         setPosition(x, y);
-        Array<TextureAtlas.AtlasRegion> runningFrames = Assets.getAtlas(atlas).findRegions("p");
-        animation = new Animation(FRAME_DURATION, runningFrames, Animation.PlayMode.NORMAL);
+        Array<TextureAtlas.AtlasRegion> runningFrames = Assets.getAtlas(atlas).findRegions(name);
+        animation = new Animation(FRAME_DURATION, runningFrames, Animation.PlayMode.LOOP);
     }
 
     public void setPlayMode(Animation.PlayMode mode) {
@@ -27,8 +29,25 @@ public class AnimatedSprite extends Sprite {
     }
 
     public void render(SpriteBatch sb) {
+
         elapsed_time += Gdx.graphics.getDeltaTime();
-        TextureRegion currentFrame = (TextureRegion) animation.getKeyFrame(elapsed_time);
+        currentFrame = (TextureRegion) animation.getKeyFrame(elapsed_time);
+        if (isLeft() && !currentFrame.isFlipX()) {
+            currentFrame.flip(true, false);
+        }
+
+        if(!isLeft() && currentFrame.isFlipX()) {
+            currentFrame.flip(true, false);
+        }
+
         sb.draw(currentFrame, getX(), getY());
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
     }
 }

@@ -5,22 +5,22 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.yellowbytestudios.hybrid.AnimatedSprite;
 import com.yellowbytestudios.hybrid.controller.types.BasicController;
 import com.yellowbytestudios.hybrid.media.Assets;
 import com.yellowbytestudios.hybrid.physics.atoms.PhysicsCharacter;
 
 import static com.yellowbytestudios.hybrid.physics.consts.ObjectNames.PLAYER;
-import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
 
 public class PhysicsPlayer extends PhysicsCharacter {
 
+    private AnimatedSprite currSprite;
+    private AnimatedSprite idleSprite;
     private AnimatedSprite runningSprite;
     private BasicController controller;
-    private float SPEED = 8f;
-    private float RUN_SPEED = 16f;
-    private float DASH_SPEED = 24f;
+    private float SPEED = 400f;
+    private float RUN_SPEED = 600f;
+    private float DASH_SPEED = 1200f;
     private float JUMP = 30f;
     private float WALL_JUMP = 10f;
 
@@ -28,7 +28,6 @@ public class PhysicsPlayer extends PhysicsCharacter {
     private int leftContacts = 0;
     private int rightContacts = 0;
     private boolean wallJumping = false;
-    private boolean facingLeft = false;
     private boolean dashing = false;
     private int dashCounter = 0;
 
@@ -37,7 +36,9 @@ public class PhysicsPlayer extends PhysicsCharacter {
         this.controller = controller;
 
         //sprites
-        runningSprite = new AnimatedSprite(Assets.ATLAS, 0, 0);
+        idleSprite = new AnimatedSprite(Assets.IDLE_ATLAS, 0, 0, "p_idle");
+        runningSprite = new AnimatedSprite(Assets.WALK_ATLAS, 0, 0, "p_walk");
+        currSprite = idleSprite;
     }
 
     // Links player object with physics body (needed for contacts).
@@ -49,38 +50,17 @@ public class PhysicsPlayer extends PhysicsCharacter {
     @Override
     public void update(float delta) {
         super.update(delta);
-        runningSprite.setPosition(sprite.getX(), sprite.getY());
-
-        updateMoving();
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        runningSprite.render(sb);
-    }
-
-    public void updateMoving() {
-        Body body = getBody();
-        Vector2 velocity = body.getLinearVelocity();
+        currSprite.setPosition(sprite.getX(), sprite.getY());
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             dashing = true;
         }
 
         if (controller != null) {
-            updateWalking();
+            updateWalking(delta);
             updateJumping();
         }
-
-        if (velocity.x > 0) {
-            facingLeft = false;
-        } else if (velocity.x < 0) {
-            facingLeft = true;
-        }
-
         updateSprite();
-
-        System.out.println(getXCoord() + ", " + getYCoord());
     }
 
     private void updateJumping() {
@@ -95,7 +75,7 @@ public class PhysicsPlayer extends PhysicsCharacter {
                     beginWallJump(false);
                 }
             } else {
-                if (!controller.jumpPressed() && body.getLinearVelocity().y > 0) {
+                if (!controller.jumpPressed() && velocity.y > 0) {
                     body.setLinearVelocity(velocity.x, 0);
                 }
             }
@@ -114,29 +94,37 @@ public class PhysicsPlayer extends PhysicsCharacter {
         setWallJumping(true);
     }
 
-    private void updateWalking() {
+    private void updateWalking(float delta) {
         // Move player
+
         if (dashing) {
             dashCounter++;
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
             getBody().setGravityScale(0f);
-            if (facingLeft) {
-                applyXSpeed(-DASH_SPEED);
+            if (isFacingLeft()) {
+                applyXSpeed(-DASH_SPEED * delta);
             } else {
-                applyXSpeed(DASH_SPEED);
+                applyXSpeed(DASH_SPEED * delta);
             }
 
         } else if (!isWallJumping()) {
-            float speed = SPEED;
+            float speed = SPEED * delta;
             if (controller.runPressed()) {
-                speed = RUN_SPEED;
+                speed = RUN_SPEED * delta;
             }
 
             if (controller.leftPressed()) {
+                setFacingLeft(true);
+                currSprite.setLeft(true);
+                updateSprite(runningSprite);
                 applyXSpeed(-speed);
             } else if (controller.rightPressed()) {
+                setFacingLeft(false);
+                currSprite.setLeft(false);
+                updateSprite(runningSprite);
                 applyXSpeed(speed);
             } else {
+                updateSprite(idleSprite);
                 applyXSpeed(0);
             }
         }
@@ -148,12 +136,22 @@ public class PhysicsPlayer extends PhysicsCharacter {
         }
     }
 
-    private void applyXSpeed(float speed) {
-        body.setLinearVelocity(speed, body.getLinearVelocity().y);
+    public void updateSprite(AnimatedSprite sprite) {
+        currSprite = sprite;
+        currSprite.setPosition(this.sprite.getX(), this.sprite.getY());
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        currSprite.render(sb);
+    }
+
+    public boolean isDashing() {
+        return dashing;
     }
 
     private void updateSprite() {
-        getSprite().setFlip(facingLeft, false);
+        getSprite().setFlip(isFacingLeft(), false);
     }
 
     public float getXCoord() {
@@ -164,17 +162,6 @@ public class PhysicsPlayer extends PhysicsCharacter {
         return sprite.getY() / 80;
     }
 
-    public int getTileX() {
-        if (facingLeft) {
-            return ((int) getXCoord()) - 1;
-        }
-        return ((int) getXCoord()) + 2;
-    }
-
-    public int getTileY() {
-        return ((int) getYCoord()) + 1;
-    }
-
     public int getGroundContacts() {
         return groundContacts;
     }
@@ -182,18 +169,6 @@ public class PhysicsPlayer extends PhysicsCharacter {
     public void setGroundContacts(int groundContacts) {
         this.groundContacts = groundContacts;
         setWallJumping(false);
-    }
-
-    public void setPos(float x, float y) {
-        getBody().setTransform(x, y, 0);
-    }
-
-    public float getX() {
-        return body.getPosition().x;
-    }
-
-    public float getY() {
-        return body.getPosition().y;
     }
 
     public int getLeftContacts() {
@@ -231,14 +206,4 @@ public class PhysicsPlayer extends PhysicsCharacter {
     public void setWallJumping(boolean wallJumping) {
         this.wallJumping = wallJumping;
     }
-
-    public float getCenterX() {
-        return getBody().getPosition().x - sprite.getWidth() / 2 / PPM;
-    }
-
-    public float getCenterY() {
-        return getBody().getPosition().y - sprite.getHeight() / 2 / PPM;
-    }
-
-
 }
