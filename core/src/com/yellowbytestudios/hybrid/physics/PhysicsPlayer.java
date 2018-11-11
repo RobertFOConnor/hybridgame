@@ -18,11 +18,11 @@ public class PhysicsPlayer extends PhysicsCharacter {
     private AnimatedSprite idleSprite;
     private AnimatedSprite runningSprite;
     private BasicController controller;
-    private float SPEED = 400f;
-    private float RUN_SPEED = 600f;
-    private float DASH_SPEED = 1200f;
-    private float JUMP = 30f;
-    private float WALL_JUMP = 10f;
+    private static final float SPEED = 400f;
+    private static final float RUN_SPEED = 600f;
+    private static final float DASH_SPEED = 1200f;
+    private static final float JUMP = 30f;
+    private static final float WALL_JUMP = 10f;
 
     private int groundContacts = 0;
     private int leftContacts = 0;
@@ -129,7 +129,7 @@ public class PhysicsPlayer extends PhysicsCharacter {
             }
         }
 
-        if (dashCounter > 10) {
+        if (dashCounter > 10 || body.getLinearVelocity().x == 0) {
             dashing = false;
             dashCounter = 0;
             getBody().setGravityScale(1f);
@@ -152,14 +152,6 @@ public class PhysicsPlayer extends PhysicsCharacter {
 
     private void updateSprite() {
         getSprite().setFlip(isFacingLeft(), false);
-    }
-
-    public float getXCoord() {
-        return sprite.getX() / 80;
-    }
-
-    public float getYCoord() {
-        return sprite.getY() / 80;
     }
 
     public int getGroundContacts() {
