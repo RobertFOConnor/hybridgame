@@ -49,7 +49,7 @@ public class PhysicsContactListener implements ContactListener {
     public void checkObjectContact(Fixture fixtureA, Fixture fixtureB) {
         Object dataA = fixtureA.getUserData();
         Object dataB = fixtureB.getUserData();
-        if (dataA != null && dataA.equals(PLAYER_FOOT)) {
+        if (dataA != null && (dataA.equals(PLAYER_FOOT) || dataA.equals(PLAYER_LEFT_SIDE) || dataA.equals(PLAYER_RIGHT_SIDE))) {
             if (dataB != null && (dataB.equals(EXIT) || dataB.equals(ENEMY))) {
                 PhysicsObject object = (PhysicsObject) fixtureB.getBody().getUserData();
                 object.setPlayerTouched(true);
