@@ -19,6 +19,7 @@ public class Assets {
     public static final String ATLAS = "pack.atlas";
     public static final String WALK_ATLAS = "textures/player/walk.atlas";
     public static final String IDLE_ATLAS = "textures/player/idle.atlas";
+    public static final String DASH_ATLAS = "textures/player/dash.atlas";
 
 
     public static final String PLAYER = "player";
@@ -29,6 +30,7 @@ public class Assets {
         assetMap.put(ATLAS, TextureAtlas.class);
         assetMap.put(WALK_ATLAS, TextureAtlas.class);
         assetMap.put(IDLE_ATLAS, TextureAtlas.class);
+        assetMap.put(DASH_ATLAS, TextureAtlas.class);
 
         Iterator it = assetMap.entrySet().iterator();
         while (it.hasNext()) {

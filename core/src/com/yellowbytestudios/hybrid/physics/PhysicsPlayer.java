@@ -2,6 +2,7 @@ package com.yellowbytestudios.hybrid.physics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -15,8 +16,7 @@ import static com.yellowbytestudios.hybrid.physics.consts.ObjectNames.PLAYER;
 public class PhysicsPlayer extends PhysicsCharacter {
 
     private AnimatedSprite currSprite;
-    private AnimatedSprite idleSprite;
-    private AnimatedSprite runningSprite;
+    private AnimatedSprite idleSprite, runningSprite, dashSprite;
     private BasicController controller;
     private static final float SPEED = 400f;
     private static final float RUN_SPEED = 600f;
@@ -38,6 +38,7 @@ public class PhysicsPlayer extends PhysicsCharacter {
         //sprites
         idleSprite = new AnimatedSprite(Assets.IDLE_ATLAS, 0, 0, "p_idle");
         runningSprite = new AnimatedSprite(Assets.WALK_ATLAS, 0, 0, "p_walk");
+        dashSprite = new AnimatedSprite(Assets.DASH_ATLAS, 0, 0, "p_dash");
         currSprite = idleSprite;
     }
 
@@ -54,6 +55,8 @@ public class PhysicsPlayer extends PhysicsCharacter {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             dashing = true;
+            dashSprite.setPlayMode(Animation.PlayMode.NORMAL);
+            updateSprite(dashSprite);
         }
 
         if (controller != null) {
@@ -104,9 +107,9 @@ public class PhysicsPlayer extends PhysicsCharacter {
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
             getBody().setGravityScale(0f);
             if (isFacingLeft()) {
-                applyXSpeed(-DASH_SPEED * delta);
+                move(dashSprite, DASH_SPEED * delta, true);
             } else {
-                applyXSpeed(DASH_SPEED * delta);
+                move(dashSprite, DASH_SPEED * delta, false);
             }
 
         } else if (!isWallJumping()) {
@@ -116,31 +119,35 @@ public class PhysicsPlayer extends PhysicsCharacter {
             }
 
             if (controller.leftPressed()) {
-                setFacingLeft(true);
-                currSprite.setLeft(true);
-                updateSprite(runningSprite);
-                applyXSpeed(-speed);
+                move(runningSprite, speed, true);
             } else if (controller.rightPressed()) {
-                setFacingLeft(false);
-                currSprite.setLeft(false);
-                updateSprite(runningSprite);
-                applyXSpeed(speed);
+                move(runningSprite, speed, false);
             } else {
                 updateSprite(idleSprite);
                 applyXSpeed(0);
             }
         }
 
-        if (dashCounter > 10 || body.getLinearVelocity().x == 0) {
+        if (dashCounter > 20 || body.getLinearVelocity().x == 0) {
             dashing = false;
             dashCounter = 0;
             getBody().setGravityScale(1f);
+            updateSprite(idleSprite);
         }
     }
 
+    private void move(AnimatedSprite sprite, float speed, boolean isLeft) {
+        setFacingLeft(isLeft);
+        currSprite.setLeft(isLeft);
+        updateSprite(sprite);
+        applyXSpeed(isLeft ? -speed : speed);
+    }
+
     public void updateSprite(AnimatedSprite sprite) {
-        currSprite = sprite;
-        currSprite.setPosition(this.sprite.getX(), this.sprite.getY());
+        if (currSprite != sprite) {
+            currSprite = sprite;
+            currSprite.setPosition(this.sprite.getX(), this.sprite.getY());
+        }
     }
 
     @Override

@@ -26,6 +26,7 @@ public class AnimatedSprite extends Sprite {
 
     public void setPlayMode(Animation.PlayMode mode) {
         animation.setPlayMode(mode);
+        elapsed_time = 0f;
     }
 
     public void render(SpriteBatch sb) {
@@ -36,7 +37,7 @@ public class AnimatedSprite extends Sprite {
             currentFrame.flip(true, false);
         }
 
-        if(!isLeft() && currentFrame.isFlipX()) {
+        if (!isLeft() && currentFrame.isFlipX()) {
             currentFrame.flip(true, false);
         }
 
