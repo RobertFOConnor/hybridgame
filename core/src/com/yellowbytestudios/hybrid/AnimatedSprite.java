@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.yellowbytestudios.hybrid.media.Assets;
@@ -20,7 +19,7 @@ public class AnimatedSprite extends Sprite {
     public AnimatedSprite(String atlas, float x, float y, String name) {
         super(new Sprite());
         setPosition(x, y);
-        Array<TextureAtlas.AtlasRegion> runningFrames = Assets.getAtlas(atlas).findRegions(name);
+        Array<Sprite> runningFrames = Assets.getAtlas(atlas).createSprites(name);
         animation = new Animation(FRAME_DURATION, runningFrames, Animation.PlayMode.LOOP);
     }
 

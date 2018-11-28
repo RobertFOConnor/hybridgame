@@ -10,6 +10,7 @@ import com.yellowbytestudios.hybrid.controller.ControllerManager;
 import com.yellowbytestudios.hybrid.controller.types.BasicController;
 import com.yellowbytestudios.hybrid.controller.types.KeyboardController;
 import com.yellowbytestudios.hybrid.controller.types.XboxController;
+import com.yellowbytestudios.hybrid.effects.LightManager;
 import com.yellowbytestudios.hybrid.effects.ParticleManager;
 import com.yellowbytestudios.hybrid.physics.atoms.PhysicsObject;
 import com.yellowbytestudios.hybrid.screens.GameScreen;
@@ -22,6 +23,7 @@ import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.GRAVITY;
 public class PhysicsManager {
 
     private World world;
+    private LightManager lightManager;
     private CameraManager cameraManager;
     private ParticleManager particleManager;
     private PhysicsContactListener contactListener;
@@ -39,6 +41,7 @@ public class PhysicsManager {
         contactListener = new PhysicsContactListener();
         world.setContactListener(contactListener);
         cameraManager = new CameraManager(camera, new OrthographicCamera());
+        lightManager = new LightManager(world, camera);
         particleManager = new ParticleManager();
 
         worldObjects = new ArrayList<PhysicsObject>();
@@ -98,11 +101,13 @@ public class PhysicsManager {
             }
         }
 
+        int objectsRemoved = 0;
         for (Integer index : objectsToRemove) {
-            PhysicsObject obj = worldObjects.get(index);
+            PhysicsObject obj = worldObjects.get(index - objectsRemoved);
             worldObjects.remove(obj);
             world.destroyBody(obj.getBody());
             obj.dispose();
+            objectsRemoved++;
         }
         objectsToRemove.clear();
         cameraManager.update(delta, getPlayer(0).getSprite());
@@ -118,9 +123,6 @@ public class PhysicsManager {
     }
 
     public void render(SpriteBatch sb) {
-        if (drawDebug) {
-            cameraManager.renderDebug(world);
-        }
 
         sb.begin();
         for (PhysicsObject object : worldObjects) {
@@ -128,6 +130,10 @@ public class PhysicsManager {
         }
         particleManager.render(sb);
         sb.end();
+        if (drawDebug) {
+            cameraManager.renderDebug(world);
+        }
+        lightManager.render();
     }
 
     public PhysicsPlayer getPlayer(int index) {
@@ -140,6 +146,7 @@ public class PhysicsManager {
 
     public void dispose() {
         world.dispose();
+        lightManager.dispose();
         contactListener = null;
     }
 }

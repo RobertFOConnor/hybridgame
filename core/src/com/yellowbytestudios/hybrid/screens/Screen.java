@@ -49,6 +49,10 @@ public abstract class Screen {
         viewport = null;
     }
 
+    public FitViewport getViewport() {
+        return viewport;
+    }
+
     public abstract void show();
 
     public abstract void hide();

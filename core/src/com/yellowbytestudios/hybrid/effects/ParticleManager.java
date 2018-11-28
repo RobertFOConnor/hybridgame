@@ -7,15 +7,19 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.ArrayList;
+
 public class ParticleManager {
 
     //Particle Objects
     private ParticleEffectPool particleEffectPool;
     private Array<PooledEffect> effects = new Array<PooledEffect>();
+    private ArrayList<Integer> effectsToRemove;
 
 
     public ParticleManager() {
         ParticleEffect particleEffect = new ParticleEffect();
+        effectsToRemove = new ArrayList<Integer>();
         particleEffect.load(Gdx.files.internal("effects/blood.p"), Gdx.files.internal("effects"));
         particleEffectPool = new ParticleEffectPool(particleEffect, 1, 10);
     }
@@ -34,14 +38,21 @@ public class ParticleManager {
     }
 
     public void render(SpriteBatch sb) {
-        for (PooledEffect effect : effects) {
+        for (int i = 0; i < effects.size; i++) {
+            PooledEffect effect = effects.get(i);
             if (effect.isComplete()) {
-                effect.free();
-                effects.removeValue(effect, false);
-                effect.dispose();
+                effectsToRemove.add(i);
             } else {
                 effect.draw(sb);
             }
         }
+
+        for (int index : effectsToRemove) {
+            PooledEffect effect = effects.get(index);
+            effect.free();
+            effects.removeValue(effect, false);
+            effect.dispose();
+        }
+        effectsToRemove.clear();
     }
 }

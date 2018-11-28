@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,6 +16,8 @@ public class Assets {
 
     public static AssetManager manager = new AssetManager();
     private static HashMap<String, Class> assetMap = new HashMap<String, Class>();
+
+    public static final String SKIN = "ui/uiskin.json";
 
     public static final String ATLAS = "pack.atlas";
     public static final String WALK_ATLAS = "textures/player/walk.atlas";
@@ -26,6 +29,7 @@ public class Assets {
 
     // Loads Assets
     public static void load() {
+        assetMap.put(SKIN, Skin.class);
 
         assetMap.put(ATLAS, TextureAtlas.class);
         assetMap.put(WALK_ATLAS, TextureAtlas.class);

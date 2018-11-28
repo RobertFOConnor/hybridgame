@@ -10,22 +10,22 @@ public class KeyboardController implements BasicController {
 
     @Override
     public boolean leftPressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.LEFT);
+        return Gdx.input.isKeyPressed(Input.Keys.A);
     }
 
     @Override
     public boolean rightPressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        return Gdx.input.isKeyPressed(Input.Keys.D);
     }
 
     @Override
     public boolean upPressed() {
-        return Gdx.input.isKeyJustPressed(Input.Keys.UP);
+        return Gdx.input.isKeyJustPressed(Input.Keys.W);
     }
 
     @Override
     public boolean downPressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.DOWN);
+        return Gdx.input.isKeyPressed(Input.Keys.S);
     }
 
     @Override
@@ -45,12 +45,12 @@ public class KeyboardController implements BasicController {
 
     @Override
     public boolean jumpPressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.UP);
+        return Gdx.input.isKeyPressed(Input.Keys.W);
     }
 
     @Override
     public boolean jumpJustPressed() {
-        return Gdx.input.isKeyJustPressed(Input.Keys.UP);
+        return Gdx.input.isKeyJustPressed(Input.Keys.W);
     }
 
     @Override

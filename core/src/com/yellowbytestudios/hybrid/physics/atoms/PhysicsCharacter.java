@@ -30,9 +30,11 @@ public class PhysicsCharacter extends PhysicsObject {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(sprite.getX(), sprite.getY());
 
+        float width = 70;
+
         Body body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(sprite.getWidth() / 2 / PPM, sprite.getHeight() / 2 / PPM);
+        shape.setAsBox(width / 2 / PPM, sprite.getHeight() / 2 / PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 0.1f;
@@ -46,9 +48,9 @@ public class PhysicsCharacter extends PhysicsObject {
 
         float sideWidth = 5 / PPM;
         float sideHeight = sprite.getHeight() / 4 / PPM;
-        float sideX = sprite.getWidth() / 2 / PPM;
+        float sideX = width / 2 / PPM;
 
-        buildSensorFixture(sprite.getWidth() / 2 / PPM - 0.02f, 20 / 4 / PPM, new Vector2(0, -sprite.getHeight() / 2 / PPM), PLAYER_FOOT);
+        buildSensorFixture(width / 2 / PPM - 0.02f, 20 / 4 / PPM, new Vector2(0, -sprite.getHeight() / 2 / PPM), PLAYER_FOOT);
         buildSensorFixture(sideWidth, sideHeight, new Vector2(-sideX, 0), PLAYER_LEFT_SIDE);
         buildSensorFixture(sideWidth, sideHeight, new Vector2(sideX, 0), PLAYER_RIGHT_SIDE);
     }

@@ -15,14 +15,15 @@ import static com.yellowbytestudios.hybrid.physics.consts.ObjectNames.PLAYER;
 
 public class PhysicsPlayer extends PhysicsCharacter {
 
+    private BasicController controller;
     private AnimatedSprite currSprite;
     private AnimatedSprite idleSprite, runningSprite, dashSprite;
-    private BasicController controller;
     private static final float SPEED = 400f;
     private static final float RUN_SPEED = 600f;
     private static final float DASH_SPEED = 1200f;
     private static final float JUMP = 30f;
     private static final float WALL_JUMP = 10f;
+
 
     private int groundContacts = 0;
     private int leftContacts = 0;
@@ -64,39 +65,6 @@ public class PhysicsPlayer extends PhysicsCharacter {
             updateJumping();
         }
         updateSprite();
-    }
-
-    private void updateJumping() {
-        Vector2 velocity = body.getLinearVelocity();
-        if (!dashing) {
-            if (controller.jumpJustPressed()) {
-                if (isGrounded()) {
-                    startJump();
-                } else if (isOnLeftWall()) {
-                    beginWallJump(true);
-                } else if (isOnRightWall()) {
-                    beginWallJump(false);
-                }
-            } else {
-                if (!controller.jumpPressed() && velocity.y > 0) {
-                    body.setLinearVelocity(velocity.x, 0);
-                }
-            }
-        }
-    }
-
-    public void startJump() {
-        if (isGrounded()) {
-            Vector2 velocity = body.getLinearVelocity();
-            body.setLinearVelocity(velocity.x, JUMP);
-        }
-    }
-
-    private void beginWallJump(boolean left) {
-        body.setLinearVelocity(left ? WALL_JUMP : -WALL_JUMP, JUMP);
-        setWallJumping(true);
-        setFacingLeft(!left);
-        currSprite.setLeft(!left);
     }
 
     private void updateWalking(float delta) {
@@ -149,6 +117,41 @@ public class PhysicsPlayer extends PhysicsCharacter {
             currSprite.setPosition(this.sprite.getX(), this.sprite.getY());
         }
     }
+
+    private void updateJumping() {
+        Vector2 velocity = body.getLinearVelocity();
+        if (!dashing) {
+            if (controller.jumpJustPressed()) {
+                if (isGrounded()) {
+                    startJump();
+                } else if (isOnLeftWall()) {
+                    beginWallJump(true);
+                } else if (isOnRightWall()) {
+                    beginWallJump(false);
+                }
+            } else {
+                if (!controller.jumpPressed() && velocity.y > 0) {
+                    body.setLinearVelocity(velocity.x, body.getLinearVelocity().y - 4f);
+                }
+            }
+        }
+    }
+
+    private void startJump() {
+        if (isGrounded()) {
+            Vector2 velocity = body.getLinearVelocity();
+            body.setLinearVelocity(velocity.x, JUMP);
+        }
+    }
+
+    private void beginWallJump(boolean left) {
+        body.setLinearVelocity(left ? WALL_JUMP : -WALL_JUMP, JUMP);
+        setWallJumping(true);
+        setFacingLeft(!left);
+        currSprite.setLeft(!left);
+    }
+
+
 
     @Override
     public void render(SpriteBatch sb) {

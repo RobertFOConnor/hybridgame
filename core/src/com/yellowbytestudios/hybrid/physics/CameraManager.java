@@ -27,7 +27,7 @@ public class CameraManager {
     public void update(float delta, Sprite playerSprite) {
 
         float targetX = playerSprite.getX() + MainGame.WIDTH / 4;
-        float targetY = playerSprite.getY() + playerSprite.getHeight() / 2;
+        float targetY = playerSprite.getY() + playerSprite.getHeight() / 2 - 200;
 
         float camX = camera.position.x;
         float camY = camera.position.y;
@@ -73,9 +73,6 @@ public class CameraManager {
         } else if (camY > topLimit) {
             setCamPos(camX, topLimit);
         }
-
-        debugCamera.position.set(camera.position);
-        debugCamera.update();
     }
 
     public void renderDebug(World world) {
@@ -85,7 +82,7 @@ public class CameraManager {
     public void setCamPos(float x, float y) {
         camera.position.set(x, y, 0);
         camera.update();
-        debugCamera.position.set(x, y, 0);
+        debugCamera.position.set(x / PPM, y / PPM, 0);
         debugCamera.update();
     }
 }
