@@ -1,7 +1,6 @@
 package com.yellowbytestudios.hybrid.physics;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -14,17 +13,10 @@ import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_PLAY
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.BIT_WALL;
 import static com.yellowbytestudios.hybrid.physics.consts.PhysicsValues.PPM;
 
-public class Exit extends PhysicsObject {
+public class Coin extends PhysicsObject {
 
-    private String linkedMap;
-    private float linkX;
-    private float linkY;
-
-    public Exit(Sprite sprite, String linkedMap, float linkX, float linkY) {
-        super(ObjectNames.EXIT, sprite);
-        this.linkedMap = linkedMap;
-        this.linkX = linkX;
-        this.linkY = linkY;
+    public Coin(Sprite sprite) {
+        super("coin", sprite);
     }
 
     @Override
@@ -44,22 +36,5 @@ public class Exit extends PhysicsObject {
         shape.dispose();
         this.body = body;
         this.body.setUserData(this);
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        //do nothing
-    }
-
-    public String getLinkedMap() {
-        return linkedMap;
-    }
-
-    public float getLinkX() {
-        return linkX;
-    }
-
-    public float getLinkY() {
-        return linkY;
     }
 }

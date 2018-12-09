@@ -1,5 +1,7 @@
 package com.yellowbytestudios.hybrid.physics;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +15,7 @@ import com.yellowbytestudios.hybrid.controller.types.XboxController;
 import com.yellowbytestudios.hybrid.effects.LightManager;
 import com.yellowbytestudios.hybrid.effects.ParticleManager;
 import com.yellowbytestudios.hybrid.physics.atoms.PhysicsObject;
-import com.yellowbytestudios.hybrid.screens.GameScreen;
+import com.yellowbytestudios.hybrid.screens.game.GameScreen;
 import com.yellowbytestudios.hybrid.screens.ScreenManager;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class PhysicsManager {
     private boolean gameOver = false;
 
 
-    public PhysicsManager(OrthographicCamera camera) {
+    public PhysicsManager(OrthographicCamera camera, float startX, float startY) {
         world = new World(new Vector2(0, GRAVITY), true);
         contactListener = new PhysicsContactListener();
         world.setContactListener(contactListener);
@@ -50,9 +52,9 @@ public class PhysicsManager {
         physicsPlayers = new ArrayList<PhysicsPlayer>();
 
         if (ControllerManager.hasController()) {
-            createPlayer(new XboxController());
+            createPlayer(new XboxController(), startX, startY);
         } else {
-            createPlayer(new KeyboardController());
+            createPlayer(new KeyboardController(), startX, startY);
         }
 
 
@@ -72,9 +74,9 @@ public class PhysicsManager {
         worldObjects.add(object);
     }
 
-    public void createPlayer(BasicController controller) {
+    public void createPlayer(BasicController controller, float startX, float startY) {
         Sprite playerSprite = new Sprite(new Texture("textures/player/p_idle.png"));
-        playerSprite.setPosition(80 * 3, 80 * 4);
+        playerSprite.setPosition(startX + playerSprite.getWidth() / 2, startY);
         physicsPlayers.add(new PhysicsPlayer(playerSprite, controller));
     }
 
@@ -87,7 +89,11 @@ public class PhysicsManager {
 
             if (object.isPlayerTouched()) {
                 if (object instanceof Exit) {
-                    gameOver = true;
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+                        Exit exit = (Exit) object;
+                        ScreenManager.setScreen(new GameScreen(exit.getLinkedMap(), exit.getLinkX(), exit.getLinkY()));
+                        break;
+                    }
                 } else if (object instanceof Enemy) {
                     if (getPlayer(0).isDashing()) {
                         objectsToRemove.add(i);
@@ -97,6 +103,8 @@ public class PhysicsManager {
                         gameOver = true;
                         // damage player
                     }
+                } else if (object instanceof Coin) {
+                    objectsToRemove.add(i);
                 }
             }
         }
@@ -113,7 +121,7 @@ public class PhysicsManager {
         cameraManager.update(delta, getPlayer(0).getSprite());
         particleManager.update(delta);
 
-        if (getPlayer(0).getBody().getPosition().y < -100) {
+        if (getPlayer(0).getBody().getPosition().y < -50) {
             ScreenManager.setScreen(new GameScreen());
         }
     }

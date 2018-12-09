@@ -8,13 +8,13 @@ import com.yellowbytestudios.hybrid.media.Assets;
 
 public class TileHelper {
 
-    public static TiledMapTileLayer.Cell getCellByName(int tileName) {
-        switch (tileName) {
-            case TileNames.WALL_TILE:
-                return getCell(0, 0, tileName, (int) TileManager.getTileSize());
-        }
-        return null;
-    }
+//    public static TiledMapTileLayer.Cell getCellByName(int tileName) {
+//        switch (tileName) {
+//            case TileNames.WALL_TILE:
+//                return getCell(0, 0, tileName, (int) TileManager.getTileSize());
+//        }
+//        return null;
+//    }
 
     /*
      * Builds a tile cell.

@@ -39,7 +39,7 @@ public class TilePhysicsWallMaker {
 
 
     public ArrayList<Body> createWalls(World world, TiledMap tileMap) {
-        TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get(LayerNames.WALL_LAYER);
+        TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get(MapProps.WALL_LAYER);
 
         Vector2 start = new Vector2();
         Vector2 finish = new Vector2();

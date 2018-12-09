@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.yellowbytestudios.hybrid.media.Assets;
+import com.yellowbytestudios.hybrid.screens.game.GameScreen;
 
 import static com.yellowbytestudios.hybrid.MainGame.HEIGHT;
 import static com.yellowbytestudios.hybrid.MainGame.WIDTH;
